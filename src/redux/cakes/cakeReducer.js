@@ -3,10 +3,10 @@ export const initialState = {
   numCakes: 10,
 };
 
-const reducer = (state = initialState, action) => {
+const cake_reducer = (state = initialState, action) => {
   switch (action.type) {
     case BUY_CAKE:
-      return { ...state, numCakes: state.numCakes - 1 };
+      return { ...state, numCakes: state.numCakes - action.payload };
     case RESET:
       return { ...state, numCakes: 10 };
     default:
@@ -14,4 +14,4 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export default reducer;
+export default cake_reducer;

@@ -1,12 +1,12 @@
-export const BUY_CAKE = "BYU_CAKE";
+export const BUY_CHOCOS = "BUY_CHOCOS";
 export const RESET = "RESET";
 
 
 
-export const buyCake = (qty) => {
+export const buyChocos = (qty) => {
   return {
-    type: BUY_CAKE,
-    info: "It reduces no of cakes in shop",
+    type: BUY_CHOCOS,
+    info: "It reduces no of CHOCOS in shop",
     payload:qty
   };
 };
