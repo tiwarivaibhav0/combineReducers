@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { buyChocos, reset } from "./redux/chocos/chocoActions";
+import { mapDispatchToProps, mapStateToProps } from "./propsConnect";
+import { buyChocos } from "./redux/chocos/chocoActions";
 import { initialState } from "./redux/chocos/chocoReducer";
-import store from "./redux/store";
 
 function ChocoStore(props) {
   console.log(props);
@@ -10,9 +10,14 @@ function ChocoStore(props) {
   const [quantity, setQuantity] = useState("");
 
   const handleclick = () => {
-    if (props.numChocos === 0) {
+    if (quantity === 0 || quantity === "") {
+      alert("Please enter a valid quantity");
+      return;
+    }
+    if (props.choco_reducer.numChocos === 0) {
       setErr("Can't buy stock is over");
-    }  else if (props.numChocos >= quantity) props.buyChocos(quantity);
+    } else if (props.choco_reducer.numChocos >= quantity)
+      props.dispatch(buyChocos(quantity));
     else {
       alert("Not enough stock!");
     }
@@ -24,7 +29,9 @@ function ChocoStore(props) {
   return (
     <div>
       <h1>Initial no of Chocolates in Store : {initialState.numChocos}</h1>
-      <h3>Current no of Chocolates in Store : {props.numChocos}</h3>
+      <h3>
+        Current no of Chocolates in Store : {props.choco_reducer.numChocos}
+      </h3>
       <input
         type="number"
         value={quantity}
@@ -36,23 +43,11 @@ function ChocoStore(props) {
       {err !== "" && (
         <>
           <h2>{err}</h2>
-          <button onClick={handleclick2}>Reset</button>
+          {/* <button onClick={handleclick2}>Reset</button> */}
         </>
       )}
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    numChocos: state.choco.numChocos,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    buyChocos: (qty) => dispatch(buyChocos(qty)),
-    reset: () => dispatch(reset()),
-  };
-};
 export default connect(mapStateToProps, mapDispatchToProps)(ChocoStore);

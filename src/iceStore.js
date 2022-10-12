@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { mapDispatchToProps, mapStateToProps } from "./propsConnect";
 import { buyIcecream } from "./redux/iceCreams/iceCreameActions";
 import { initialState } from "./redux/iceCreams/iceCreameReducer";
-import store from "./redux/store";
 
 function IceStore(props) {
   console.log(props);
@@ -10,9 +10,14 @@ function IceStore(props) {
   const [quantity, setQuantity] = useState("");
 
   const handleclick = () => {
-    if (props.numIcecream === 0) {
+    if (quantity === 0 || quantity === "") {
+      alert("Please enter a valid quantity");
+      return;
+    }
+    if (props.ice_reducer.numIcecream === 0) {
       setErr("Can't buy stock is over");
-    } else if (props.numIcecream >= quantity) props.buyIcecream(quantity);
+    } else if (props.ice_reducer.numIcecream >= quantity)
+      props.dispatch(buyIcecream(quantity));
     else {
       alert("Not enough stock!");
     }
@@ -24,7 +29,9 @@ function IceStore(props) {
   return (
     <div>
       <h1>Initial no of IceCreams in Store : {initialState.numIcecream}</h1>
-      <h3>Current no of IceCreams in Store : {props.numIcecream}</h3>
+      <h3>
+        Current no of IceCreams in Store : {props.ice_reducer.numIcecream}
+      </h3>
       <input
         type="number"
         value={quantity}
@@ -36,23 +43,11 @@ function IceStore(props) {
       {err !== "" && (
         <>
           <h2>{err}</h2>
-          <button onClick={handleclick2}>Reset</button>
+          {/* <button onClick={handleclick2}>Reset</button> */}
         </>
       )}
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    numIcecream: state.ice_reducer.numIcecream,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    buyIcecream: (qty) => dispatch(buyIcecream(qty)),
-    // reset: () => dispatch(reset()),
-  };
-};
 export default connect(mapStateToProps, mapDispatchToProps)(IceStore);
